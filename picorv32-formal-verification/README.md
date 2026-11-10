@@ -3,10 +3,9 @@
 
 | | |
 |---|---|
-| **Author** |NEETA SARA REJI|
-
+| **Author** | NEETA SARA REJI |
 | **Design under test** | PicoRV32 (32-bit RISC-V CPU), https://github.com/YosysHQ/picorv32 |
-| **Purpose** | Learn and demonstrate the formal verification flow; groundwork for formal verification and RVFI integration of the 64-bit VEGA core (C-DAC) |
+| **Purpose** | Learn and demonstrate the formal verification flow; groundwork for formal verification and RVFI integration of the 64-bit RISC V |
 
 ---
 
@@ -38,7 +37,7 @@
 | # | Activity | Tool | Result |
 |---|---|---|---|
 | 1 | Verilator lint of `picorv32.v` | Verilator 5.053 | No errors; style warnings only |
-| 2 | riscv-formal ISA proof (uses RVFI) | SBY + Boolector | **87 of 87 jobs PASS**; 0 FAIL; no timeouts or errors |
+| 2 | riscv-formal ISA proof (uses RVFI) | SBY + Boolector | **87 of 87 jobs PASS** (70 instruction + 17 CSR/consistency/cover); 0 FAIL; no timeouts or errors |
 | 3 | Own memory-protocol proof, BMC depth 30 | SBY + Boolector | **PASS** (steps 0 to 29, no violation) |
 | 4 | Own cover check (non-vacuity) | SBY + Boolector | **PASS** (instruction fetch reached at step 4) |
 | 5 | Simulation of a hand-assembled program | Verilator + C++ testbench | **PASS**, exit code 0 |
@@ -46,8 +45,46 @@
 Important qualifiers:
 - All formal runs are **bounded model checking (BMC)**: no violation exists within the checked depth. The riscv-formal instruction checks were observed running to step 20; the memory proof uses depth 30. These are not unbounded proofs.
 - RVFI was **used** (PicoRV32 ships its own RVFI output logic) but **not written** in this project. Only the riscv-formal checks use RVFI; the own memory proof does not.
-- Checked configuration (ISA string, depths): see `results/checks.cfg.used` after running script 03. [FILL: paste the `isa` line here]
-- Breakdown of the 87 jobs into instruction and consistency checks: see `results/riscv_formal_results.csv` (script 04). [FILL counts]
+- Checked configuration: `isa rv32imc` with defines `RISCV_FORMAL_ALTOPS`, `RISCV_FORMAL_ALIGNED_MEM`, `RISCV_FORMAL_UMODE`; depths in `results/checks.cfg.used` (insn 20; reg 15-25; pc_fwd/pc_bwd/causal/unique/liveness up to 30; cover 1-15).
+- Breakdown: 70 instruction checks (37 RV32I + 8 M + 25 C) and 17 others (see 1.1). Per-job result and time: `results/riscv_formal_results.csv`.
+
+### 1.1 Detailed results (workplace workstation, Docker image `rtl-formal:latest`)
+
+**Run provenance**
+
+| Run | Where | Yosys | SBY | Verilator | PicoRV32 / riscv-formal | Result |
+|---|---|---|---|---|---|---|
+| Earlier | Development laptop | 0.69+208 | 0.69 | 5.053 | latest at the time (not recorded) | 87/87 PASS |
+| Reference run (results in `results/`) | Workplace workstation, Docker | 0.48+77 | 0.48 | 5.033 devel | `ef203c2` / `c992aa6` | **87/87 PASS** |
+
+Boolector 3.2.4 was the solver. Exact output: `results/tool_versions.txt`.
+
+**Jobs by group (all PASS)**
+
+| Group | Jobs | Notes |
+|---|---|---|
+| Instruction checks `insn_*` | 70 | 37 RV32I + 8 M + 25 C (list below) |
+| `reg_ch0` | 1 | slowest job, 6 min 13 s |
+| `pc_fwd_ch0`, `pc_bwd_ch0` | 2 | PC continuity |
+| `causal_ch0`, `unique_ch0` | 2 | ordering |
+| `liveness_ch0` | 1 | progress |
+| `cover` | 1 | two instructions retire within depth 15 (non-vacuity) |
+| `csrw_mcycle`, `csrw_minstret` | 2 | CSR write behaviour |
+| `csrc_inc_*`, `csrc_upcnt_*` (mcycle, minstret) | 4 | counter increment/update |
+| `csr_ill_c00`, `c02`, `c80`, `c82` | 4 | illegal user-mode CSR accesses trap |
+| **Total** | **87** | 0 FAIL, no TIMEOUT or ERROR in any log |
+
+**Instructions checked**
+- RV32I (37): add addi and andi auipc beq bge bgeu blt bltu bne jal jalr lb lbu lh lhu lui lw or ori sb sh sll slli slt slti sltiu sltu sra srai srl srli sub sw xor xori
+- M (8): mul mulh mulhsu mulhu div divu rem remu
+- C (25): c.add c.addi c.addi16sp c.addi4spn c.and c.andi c.beqz c.bnez c.j c.jal c.jalr c.jr c.li c.lui c.lw c.lwsp c.mv c.or c.slli c.srai c.srli c.sub c.sw c.swsp c.xor
+- No `fence`, `ecall` or `ebreak` checks appear in the generated job list.
+
+**Configuration caveats**
+- `RISCV_FORMAL_ALTOPS`: multiply/divide logic is replaced by simple stand-in operations to keep proofs tractable, so the M checks verify the surrounding control and data flow, not the real multiplier/divider arithmetic.
+- `RISCV_FORMAL_ALIGNED_MEM`: memory accesses are assumed aligned.
+- `RISCV_FORMAL_UMODE`: user-mode support enabled for CSR and illegal-instruction checks.
+- Interrupts are not part of this configuration.
 
 ---
 
@@ -122,7 +159,7 @@ Every formal result here is bounded. For riscv-formal this is the standard and a
 | GTKWave | Waveform viewer for `.vcd` files |
 | OSS CAD Suite | Bundle of up-to-date versions of all of the above |
 
-Versions used: Yosys 0.69+208, SBY v0.69, Verilator 5.053 (full record in `results/tool_versions.txt`).
+Versions used for the committed results (workplace workstation, Docker `rtl-formal:latest`): Yosys 0.48+77, SBY v0.48, Verilator 5.033 devel, Boolector 3.2.4; PicoRV32 `ef203c2b0a3f`, riscv-formal `c992aa61fdfe` (full record in `results/tool_versions.txt`). An earlier run on a laptop with Yosys 0.69+208, SBY 0.69 and Verilator 5.053 also gave 87/87 PASS.
 
 ---
 
@@ -202,7 +239,7 @@ One job per instruction in the configured ISA (`_ch0` = RVFI channel 0). For eac
 | Loads | lb, lh, lw, lbu, lhu | address, read mask, sign/zero extension, alignment trap |
 | Stores | sb, sh, sw | address, write mask, data in correct byte lanes |
 
-This table is the standard RV32I set (37 instructions). The exact set run in this project depends on `isa` in `checks.cfg` and is listed in `results/riscv_formal_results.csv`. Passing instruction checks seen in the pasted logs included sub, xor, xori, sra, srai, srl, srli, sb, sh, sw and lhu.
+The table above is the RV32I set (37 instructions). This project's ISA is `rv32imc`, so 70 instruction checks ran: the 37 RV32I ones, 8 M-extension (mul, mulh, mulhsu, mulhu, div, divu, rem, remu) and 25 compressed (`insn_c_*`). All 70 passed; the full list is in section 1.1 and `results/riscv_formal_results.csv`.
 
 ### 8.3 Consistency checks
 An instruction check trusts the operands the core reports. A core could report operands that came from nowhere and still pass every instruction check. Consistency checks close this gap by verifying that the stream of reports forms one believable execution. They are instruction-agnostic: the solver picks any instruction stream.
@@ -217,7 +254,7 @@ An instruction check trusts the operands the core reports. A core could report o
 | `liveness` | A fetched instruction with responding memory retires within a bound | The core does not hang |
 | `ill`, `csr*`, `bus*`, `cover` | Illegal-instruction, CSR, bus and reachability checks | Present only if enabled in `checks.cfg` |
 
-Only `reg_ch0` was individually confirmed in the saved logs (about 12 minutes). Which of the other consistency jobs exist in this run is recorded by script 04 in `results/riscv_formal_results.csv`.
+Jobs generated and passed in this configuration: `reg`, `pc_fwd`, `pc_bwd`, `causal`, `unique`, `liveness` and `cover`, plus ten CSR jobs (`csrw_*`, `csrc_inc_*`, `csrc_upcnt_*`, `csr_ill_*`) for `mcycle`/`minstret` and the illegal user-mode counters. `reg_ch0` was the slowest (6 min 13 s in the Docker run; about 12 min on the earlier laptop run). Per-job times are in `results/riscv_formal_results.csv`.
 
 Together the families form a chain: each instruction is correct given its inputs (`insn`), the inputs are the results of earlier instructions (`reg`, `pc_*`), and the ordering is sane (`causal`, `unique`).
 
@@ -446,17 +483,24 @@ cd checks && sby -f insn_add_ch0.sby
 ```
 If `genchecks.py` or `make` complains about a missing `picorv32.v`, check the contents of `external/riscv-formal/cores/picorv32/` and its Makefile; the layout can differ between riscv-formal versions.
 
+### Running inside Docker (as done for the committed results)
+```bash
+docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -e OSS_CAD=/opt/oss-cad-suite \
+  -v "$PWD":/work -w /work rtl-formal:latest bash -lc "scripts/02_mem_formal.sh"
+```
+`--user` makes files created in the mounted repo belong to the host user. For the long run use `docker run -d ... bash -lc "scripts/03_riscv_formal.sh 10 > results/run_nohup.log 2>&1"` (10 parallel jobs on a 20-core machine) and poll `ls external/riscv-formal/cores/picorv32/checks/*/PASS | wc -l`.
+
 ---
 
 ## 15. Limitations and honest notes
 
 1. Bounded results only (see 3.3).
-2. Only the configuration in `results/checks.cfg.used` was verified (M, C or interrupt checks only if that file enables them).
+2. Only the configuration in `results/checks.cfg.used` was verified: `rv32imc` with ALTOPS (stand-in multiply/divide arithmetic), aligned memory accesses and user-mode CSR checks. Interrupts are not covered, and no `fence`/`ecall`/`ebreak` checks were generated.
 3. riscv-formal trusts PicoRV32's RVFI implementation; it was not written or reviewed in this work.
 4. The own proof checks bus-protocol stability only; it does not assert `trap` behaviour or interrupts.
 5. The first memory-proof attempt failed with `FileNotFoundError` because the files had not been created; resolved by creating them.
 6. A bug-injection experiment (deliberately breaking an instruction to see a check fail) was **not** performed. It is recommended as future work to demonstrate that the checks detect errors.
-7. Statements about checks other than those visible in saved logs (full job list, exact depths) must be taken from `results/` after running the scripts.
+7. Two independent runs exist (laptop and Docker, section 1.1) with different tool versions; both gave 87/87 PASS. The committed `results/` files come from the Docker run.
 
 ---
 
@@ -494,4 +538,4 @@ See `docs/troubleshooting.md`. Most common: `command not found` means the enviro
 - SymbiYosys: https://symbiyosys.readthedocs.io
 - RISC-V specifications: https://riscv.org/specifications/
 
-PicoRV32 and riscv-formal are ISC-licensed by their authors and are not redistributed here. Licence for this repository's own files: [FILL].
+PicoRV32 and riscv-formal are ISC-licensed by their authors and are not redistributed here. Licence for this repository's own files: not specified.
