@@ -1,0 +1,31 @@
+SBY 10:08:47 [mem_cover] Removing directory '/work/build_mem/mem_cover'.
+SBY 10:08:47 [mem_cover] Copy '/work/build_mem/picorv32.v' to '/work/build_mem/mem_cover/src/picorv32.v'.
+SBY 10:08:47 [mem_cover] Copy '/work/build_mem/formal_mem.sv' to '/work/build_mem/mem_cover/src/formal_mem.sv'.
+SBY 10:08:47 [mem_cover] engine_0: smtbmc boolector
+SBY 10:08:47 [mem_cover] base: starting process "cd mem_cover/src; yosys -ql ../model/design.log ../model/design.ys"
+SBY 10:08:47 [mem_cover] base: finished (returncode=0)
+SBY 10:08:47 [mem_cover] prep: starting process "cd mem_cover/model; yosys -ql design_prep.log design_prep.ys"
+SBY 10:08:47 [mem_cover] prep: finished (returncode=0)
+SBY 10:08:47 [mem_cover] smt2: starting process "cd mem_cover/model; yosys -ql design_smt2.log design_smt2.ys"
+SBY 10:08:47 [mem_cover] smt2: finished (returncode=0)
+SBY 10:08:47 [mem_cover] engine_0: starting process "cd mem_cover; yosys-smtbmc -s boolector --presat --unroll -c --noprogress -t 30  --append 0 --dump-vcd engine_0/trace%.vcd --dump-yw engine_0/trace%.yw --dump-vlogtb engine_0/trace%_tb.v --dump-smtc engine_0/trace%.smtc model/design_smt2.smt2"
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Solver: boolector
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Checking cover reachability in step 0..
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Checking cover reachability in step 1..
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Checking cover reachability in step 2..
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Checking cover reachability in step 3..
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Checking cover reachability in step 4..
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Reached cover statement in step 4 at formal_mem: formal_mem.sv:42.27-42.79 (_witness_.check_cover_formal_mem_sv_42_961)
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Writing trace to VCD file: engine_0/trace0.vcd
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Writing trace to Verilog testbench: engine_0/trace0_tb.v
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Writing trace to constraints file: engine_0/trace0.smtc
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Writing trace to Yosys witness file: engine_0/trace0.yw
+SBY 10:08:47 [mem_cover] engine_0: ##   0:00:00  Status: passed
+SBY 10:08:47 [mem_cover] engine_0: finished (returncode=0)
+SBY 10:08:47 [mem_cover] engine_0: Status returned by engine: pass
+SBY 10:08:47 [mem_cover] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 10:08:47 [mem_cover] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:00 (0)
+SBY 10:08:47 [mem_cover] summary: engine_0 (smtbmc boolector) returned pass
+SBY 10:08:47 [mem_cover] summary: cover trace: mem_cover/engine_0/trace0.vcd
+SBY 10:08:47 [mem_cover] summary:   reached cover statement formal_mem._witness_.check_cover_formal_mem_sv_42_961 at formal_mem.sv:42.27-42.79 in step 4
+SBY 10:08:47 [mem_cover] DONE (PASS, rc=0)

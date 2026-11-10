@@ -1,0 +1,8 @@
+Reading checks.cfg.
+Creating checks directory.
+Generated 87 checks.
+SBY 10:31:17 [insn_sw_ch0] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:49 (49)
+SBY 10:31:17 [insn_sw_ch0] summary: engine_0 (smtbmc boolector) returned pass
+SBY 10:31:17 [insn_sw_ch0] summary: engine_0 did not produce any traces
+SBY 10:31:17 [insn_sw_ch0] DONE (PASS, rc=0)
+make: Leaving directory '/work/external/riscv-formal/cores/picorv32/checks'

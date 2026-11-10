@@ -1,0 +1,140 @@
+%Warning-DECLFILENAME: picorv32.v:2174:8: Filename 'picorv32' does not match MODULE name: 'picorv32_regs'
+ 2174 | module picorv32_regs (
+      |        ^~~~~~~~~~~~~
+                       ... For warning description see https://verilator.org/warn/DECLFILENAME?v=5.033
+                       ... Use "/* verilator lint_off DECLFILENAME */" and lint_on around source to disable this message.
+%Warning-GENUNNAMED: picorv32.v:272:32: Unnamed generate block 'genblk1' (IEEE 1800-2023 27.6)
+                                      : ... Suggest assign a label with 'begin : gen_<label_name>'
+  272 |  generate if (ENABLE_FAST_MUL) begin
+      |                                ^~~~~
+%Warning-GENUNNAMED: picorv32.v:285:27: Unnamed generate block 'genblk1' (IEEE 1800-2023 27.6)
+                                      : ... Suggest assign a label with 'begin : gen_<label_name>'
+  285 |  end else if (ENABLE_MUL) begin
+      |                           ^~~~~
+%Warning-GENUNNAMED: picorv32.v:298:11: Unnamed generate block 'genblk1' (IEEE 1800-2023 27.6)
+                                      : ... Suggest assign a label with 'begin : gen_<label_name>'
+  298 |  end else begin
+      |           ^~~~~
+%Warning-GENUNNAMED: picorv32.v:305:27: Unnamed generate block 'genblk2' (IEEE 1800-2023 27.6)
+                                      : ... Suggest assign a label with 'begin : gen_<label_name>'
+  305 |  generate if (ENABLE_DIV) begin
+      |                           ^~~~~
+%Warning-GENUNNAMED: picorv32.v:318:11: Unnamed generate block 'genblk2' (IEEE 1800-2023 27.6)
+                                      : ... Suggest assign a label with 'begin : gen_<label_name>'
+  318 |  end else begin
+      |           ^~~~~
+%Warning-GENUNNAMED: picorv32.v:1229:30: Unnamed generate block 'genblk3' (IEEE 1800-2023 27.6)
+                                       : ... Suggest assign a label with 'begin : gen_<label_name>'
+ 1229 |  generate if (TWO_CYCLE_ALU) begin
+      |                              ^~~~~
+%Warning-GENUNNAMED: picorv32.v:1238:11: Unnamed generate block 'genblk3' (IEEE 1800-2023 27.6)
+                                       : ... Suggest assign a label with 'begin : gen_<label_name>'
+ 1238 |  end else begin
+      |           ^~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:181:13: Signal is not used: 'dbg_insn_addr'
+                                        : ... note: In instance 'picorv32'
+  181 |  reg [31:0] dbg_insn_addr;
+      |             ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:183:7: Signal is not used: 'dbg_mem_valid'
+                                       : ... note: In instance 'picorv32'
+  183 |  wire dbg_mem_valid = mem_valid;
+      |       ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:184:7: Signal is not used: 'dbg_mem_instr'
+                                       : ... note: In instance 'picorv32'
+  184 |  wire dbg_mem_instr = mem_instr;
+      |       ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:185:7: Signal is not used: 'dbg_mem_ready'
+                                       : ... note: In instance 'picorv32'
+  185 |  wire dbg_mem_ready = mem_ready;
+      |       ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:186:14: Signal is not used: 'dbg_mem_addr'
+                                        : ... note: In instance 'picorv32'
+  186 |  wire [31:0] dbg_mem_addr  = mem_addr;
+      |              ^~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:187:14: Signal is not used: 'dbg_mem_wdata'
+                                        : ... note: In instance 'picorv32'
+  187 |  wire [31:0] dbg_mem_wdata = mem_wdata;
+      |              ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:188:14: Signal is not used: 'dbg_mem_wstrb'
+                                        : ... note: In instance 'picorv32'
+  188 |  wire [ 3:0] dbg_mem_wstrb = mem_wstrb;
+      |              ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:189:14: Signal is not used: 'dbg_mem_rdata'
+                                        : ... note: In instance 'picorv32'
+  189 |  wire [31:0] dbg_mem_rdata = mem_rdata;
+      |              ^~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:375:7: Signal is not used: 'mem_busy'
+                                       : ... note: In instance 'picorv32'
+  375 |  wire mem_busy = |{mem_do_prefetch, mem_do_rinst, mem_do_rdata, mem_do_wdata};
+      |       ^~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:696:14: Signal is not used: 'dbg_rs1val'
+                                        : ... note: In instance 'picorv32'
+  696 |   reg [31:0] dbg_rs1val;
+      |              ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:697:14: Signal is not used: 'dbg_rs2val'
+                                        : ... note: In instance 'picorv32'
+  697 |   reg [31:0] dbg_rs2val;
+      |              ^~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:698:7: Signal is not used: 'dbg_rs1val_valid'
+                                       : ... note: In instance 'picorv32'
+  698 |   reg dbg_rs1val_valid;
+      |       ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:699:7: Signal is not used: 'dbg_rs2val_valid'
+                                       : ... note: In instance 'picorv32'
+  699 |   reg dbg_rs2val_valid;
+      |       ^~~~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:769:6: Signal is not used: 'dbg_valid_insn'
+                                       : ... note: In instance 'picorv32'
+  769 |  reg dbg_valid_insn;
+      |      ^~~~~~~~~~~~~~
+%Warning-UNUSEDSIGNAL: picorv32.v:1184:15: Signal is not used: 'dbg_ascii_state'
+                                         : ... note: In instance 'picorv32'
+ 1184 |   reg [127:0] dbg_ascii_state;
+      |               ^~~~~~~~~~~~~~~
+%Warning-BLKSEQ: picorv32.v:1406:20: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1406 |   set_mem_do_rinst = 0;
+      |                    ^
+%Warning-BLKSEQ: picorv32.v:1407:20: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1407 |   set_mem_do_rdata = 0;
+      |                    ^
+%Warning-BLKSEQ: picorv32.v:1408:20: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1408 |   set_mem_do_wdata = 0;
+      |                    ^
+%Warning-BLKSEQ: picorv32.v:1440:20: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1440 |   next_irq_pending = ENABLE_IRQ ? irq_pending & LATCHED_IRQ : 'bx;
+      |                    ^
+%Warning-BLKSEQ: picorv32.v:1495:16: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1495 |     current_pc = reg_next_pc;
+      |                ^
+%Warning-BLKSEQ: picorv32.v:1500:18: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1500 |       current_pc = latched_store ? (latched_stalu ? alu_out_q : reg_out) & ~1 : reg_next_pc;
+      |                  ^
+%Warning-BLKSEQ: picorv32.v:1819:24: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1819 |       set_mem_do_rinst = 1;
+      |                        ^
+%Warning-BLKSEQ: picorv32.v:1870:24: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1870 |       set_mem_do_wdata = 1;
+      |                        ^
+%Warning-BLKSEQ: picorv32.v:1898:24: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1898 |       set_mem_do_rdata = 1;
+      |                        ^
+%Warning-BLKSEQ: picorv32.v:1474:21: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1474 |    next_irq_pending = 0;
+      |                     ^
+%Warning-BLKSEQ: picorv32.v:1974:14: Blocking assignment '=' in sequential logic process
+                                   : ... Suggest using delayed assignment '<='
+ 1974 |   current_pc = 'bx;
+      |              ^
+- V e r i l a t i o n   R e p o r t: Verilator 5.033 devel rev v5.032-37-g20faa9946
+- Verilator: Built from 0.105 MB sources in 9 modules, into 0.120 MB in 5 C++ files needing 0.000 MB
+- Verilator: Walltime 0.209 s (elab=0.055, cvt=0.042, bld=0.000); cpu 0.081 s on 1 threads; alloced 5.531 MB
