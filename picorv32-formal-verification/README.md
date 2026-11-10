@@ -3,9 +3,8 @@
 
 | | |
 |---|---|
-| **Author** | [FILL name] |
-| **Project lead** | [FILL] |
-| **Date** | [FILL] |
+| **Author** |NEETA SARA REJI|
+
 | **Design under test** | PicoRV32 (32-bit RISC-V CPU), https://github.com/YosysHQ/picorv32 |
 | **Purpose** | Learn and demonstrate the formal verification flow; groundwork for formal verification and RVFI integration of the 64-bit VEGA core (C-DAC) |
 
