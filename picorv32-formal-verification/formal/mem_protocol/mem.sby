@@ -1,0 +1,20 @@
+[tasks]
+bmc
+cover
+
+[options]
+bmc: mode bmc
+cover: mode cover
+depth 30
+
+[engines]
+smtbmc boolector
+
+[script]
+read_verilog -formal picorv32.v
+read_verilog -sv -formal formal_mem.sv
+prep -top formal_mem
+
+[files]
+picorv32.v
+formal_mem.sv

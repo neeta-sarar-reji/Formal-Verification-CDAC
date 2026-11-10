@@ -1,0 +1,8 @@
+external/
+obj_picorv32/
+mem_bmc/
+mem_cover/
+*.vcd
+*.log
+sim_picorv32
+checks/
