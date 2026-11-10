@@ -1,0 +1,7 @@
+date: 2026-11-10
+Yosys 0.48+77 (git sha1 eac2294ca, clang++ 18.1.8 -fPIC -O3)
+SBY v0.48
+Verilator 5.033 devel rev v5.032-37-g20faa9946
+3.2.4
+picorv32:     ef203c2b0a3fb793280f5114941416c425c5b461
+riscv-formal: c992aa61fdfe0846c5ed90324c596202a1c69b76

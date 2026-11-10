@@ -10,7 +10,7 @@ for d in */; do n=${d%/}
   t=$(grep -m1 "Elapsed clock time" $d/logfile.txt 2>/dev/null | sed 's/.*: //')
   echo "$n,$c,$r,\"$t\"" >> "$OUT"
 done
-sort -o "$OUT" "$OUT"
+{ head -1 "$OUT"; tail -n +2 "$OUT" | sort; } > "$OUT.tmp" && mv "$OUT.tmp" "$OUT"
 echo "Total jobs : $(ls -d */ | wc -l)"
 echo "PASS       : $(ls */PASS 2>/dev/null | wc -l)"
 echo "FAIL       : $(ls */FAIL 2>/dev/null | wc -l)"
